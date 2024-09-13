@@ -48,7 +48,6 @@ Before you begin, ensure you have the following installed on your system:
     python manage.py runserver
     ```
 
-5. Access the app by going to [http://127.0.0.1:8000](http://127.0.0.1:8000).
 
 ### Contributing
 
