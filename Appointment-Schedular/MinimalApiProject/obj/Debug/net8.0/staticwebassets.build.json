@@ -1,0 +1,39 @@
+{
+  "Version": 1,
+  "Hash": "jkZmBlaP7bGkziB8gnkjeyI2i2Sk7rNpllL+4/Pm/TQ=",
+  "Source": "MinimalApiProject",
+  "BasePath": "_content/MinimalApiProject",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [
+    {
+      "Name": "MinimalApiProject/wwwroot",
+      "Source": "MinimalApiProject",
+      "ContentRoot": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/wwwroot/",
+      "BasePath": "_content/MinimalApiProject",
+      "Pattern": "**"
+    }
+  ],
+  "Assets": [
+    {
+      "Identity": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/wwwroot/index.html",
+      "SourceId": "MinimalApiProject",
+      "SourceType": "Discovered",
+      "ContentRoot": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/wwwroot/",
+      "BasePath": "_content/MinimalApiProject",
+      "RelativePath": "index.html",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "AssetMergeBehavior": "PreferTarget",
+      "AssetMergeSource": "",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot/index.html"
+    }
+  ]
+}

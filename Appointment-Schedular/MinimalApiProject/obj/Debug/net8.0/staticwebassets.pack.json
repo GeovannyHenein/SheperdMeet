@@ -1,0 +1,25 @@
+{
+  "Files": [
+    {
+      "Id": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/wwwroot/index.html",
+      "PackagePath": "staticwebassets/index.html"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.MinimalApiProject.Microsoft.AspNetCore.StaticWebAssets.props",
+      "PackagePath": "build\\Microsoft.AspNetCore.StaticWebAssets.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.build.MinimalApiProject.props",
+      "PackagePath": "build\\MinimalApiProject.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildMultiTargeting.MinimalApiProject.props",
+      "PackagePath": "buildMultiTargeting\\MinimalApiProject.props"
+    },
+    {
+      "Id": "obj/Debug/net8.0/staticwebassets/msbuild.buildTransitive.MinimalApiProject.props",
+      "PackagePath": "buildTransitive\\MinimalApiProject.props"
+    }
+  ],
+  "ElementsToRemove": []
+}
