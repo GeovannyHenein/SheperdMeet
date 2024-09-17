@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "jkZmBlaP7bGkziB8gnkjeyI2i2Sk7rNpllL+4/Pm/TQ=",
+  "Hash": "lYD9IbCXB8bAXn/gosVqXCSzzObzwgjd3qkeQruMxXA=",
   "Source": "MinimalApiProject",
   "BasePath": "_content/MinimalApiProject",
   "Mode": "Default",
@@ -10,17 +10,17 @@
     {
       "Name": "MinimalApiProject/wwwroot",
       "Source": "MinimalApiProject",
-      "ContentRoot": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/wwwroot/",
+      "ContentRoot": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/wwwroot/",
       "BasePath": "_content/MinimalApiProject",
       "Pattern": "**"
     }
   ],
   "Assets": [
     {
-      "Identity": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/wwwroot/index.html",
+      "Identity": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/wwwroot/index.html",
       "SourceId": "MinimalApiProject",
       "SourceType": "Discovered",
-      "ContentRoot": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/wwwroot/",
+      "ContentRoot": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/wwwroot/",
       "BasePath": "_content/MinimalApiProject",
       "RelativePath": "index.html",
       "AssetKind": "All",

@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj": {}
+    "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj": {}
   },
   "projects": {
-    "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj": {
+    "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj",
+        "projectUniqueName": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj",
         "projectName": "MinimalApiProject",
-        "projectPath": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj",
+        "projectPath": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj",
         "packagesPath": "/Users/FoFa/.nuget/packages/",
-        "outputPath": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/obj/",
+        "outputPath": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/FoFa/.nuget/NuGet/NuGet.Config"
@@ -43,6 +43,14 @@
         "net8.0": {
           "targetAlias": "net8.0",
           "dependencies": {
+            "Microsoft.AspNetCore.Authentication": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
+            "Microsoft.AspNetCore.Authentication.Cookies": {
+              "target": "Package",
+              "version": "[2.2.0, )"
+            },
             "Microsoft.AspNetCore.Authentication.Google": {
               "target": "Package",
               "version": "[8.0.8, )"
@@ -52,6 +60,10 @@
               "version": "[2.2.0, )"
             },
             "Microsoft.AspNetCore.Identity.EntityFrameworkCore": {
+              "target": "Package",
+              "version": "[8.0.8, )"
+            },
+            "Microsoft.EntityFrameworkCore": {
               "target": "Package",
               "version": "[8.0.8, )"
             },
