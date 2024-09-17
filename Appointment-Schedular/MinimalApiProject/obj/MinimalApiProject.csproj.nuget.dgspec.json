@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj": {}
+    "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/SheperdMeet/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj": {}
   },
   "projects": {
-    "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj": {
+    "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/SheperdMeet/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj",
+        "projectUniqueName": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/SheperdMeet/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj",
         "projectName": "MinimalApiProject",
-        "projectPath": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj",
+        "projectPath": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/SheperdMeet/Appointment-Schedular/MinimalApiProject/MinimalApiProject.csproj",
         "packagesPath": "/Users/FoFa/.nuget/packages/",
-        "outputPath": "/Users/FoFa/CAP/Appointment-Schedular/MinimalApiProject/obj/",
+        "outputPath": "/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/SheperdMeet/Appointment-Schedular/MinimalApiProject/obj/",
         "projectStyle": "PackageReference",
         "configFilePaths": [
           "/Users/FoFa/.nuget/NuGet/NuGet.Config"
