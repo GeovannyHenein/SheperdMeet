@@ -9,6 +9,7 @@ using MinimalApiProject.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
@@ -24,8 +25,8 @@ builder.Services.AddAuthentication(options =>
 })
 .AddGoogle(options =>
 {
-    options.ClientId = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_ID");
-    options.ClientSecret = Environment.GetEnvironmentVariable("GOOGLE_CLIENT_SECRET");
+    options.ClientId = "YOUR_GOOGLE_CLIENT_ID";
+    options.ClientSecret = "YOUR_GOOGLE_CLIENT_SECRET";
     options.CallbackPath = "/signin-google";
 });
 
