@@ -2,12 +2,17 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication;
+using FluentValidation;
 using MinimalApiProject.Models;
+using MinimalApiProject.Services;
+using MinimalApiProject.Validators;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configure services
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -20,16 +25,22 @@ builder.Services.AddAuthentication(options =>
 })
 .AddGoogle(options =>
 {
-
     options.Scope.Add("email");
     options.Scope.Add("profile");
 });
+
 builder.Services.AddAuthorization();
+builder.Services.AddHttpClient(); // For external APIs like Calendly
+builder.Services.AddValidatorsFromAssemblyContaining<PriestAvailabilityValidator>(); // Register FluentValidation
+
+// Register custom services
+builder.Services.AddScoped<CalendlyService>();
+
 var app = builder.Build();
 app.UseAuthentication();
 app.UseAuthorization();
 
-// New endpoints for handling priest availability
+// Priest availability endpoints
 app.MapGet("/priestavailabilities", async (AppDbContext db) => await db.PriestAvailabilities.ToListAsync());
 
 app.MapPost("/priestavailabilities", async (PriestAvailabilityInput availability, AppDbContext db) => {
@@ -38,33 +49,23 @@ app.MapPost("/priestavailabilities", async (PriestAvailabilityInput availability
     return Results.Created($"/priestavailabilities/{availability.ID}", availability);
 });
 
-// Frontend integration: Example payload for priest availability
-app.MapPost("/priestavailabilities/frontend", async (HttpContext context, AppDbContext db) =>
+app.MapPost("/priestavailabilities/frontend", async (HttpContext context, AppDbContext db, IValidator<PriestAvailabilityInput> validator, CalendlyService calendlyService) =>
 {
-    // Reading JSON data from frontend
     var availabilityData = await context.Request.ReadFromJsonAsync<PriestAvailabilityInput>();
 
-    if (availabilityData == null)
-        return Results.BadRequest("Invalid availability data.");
+    var validationResult = await validator.ValidateAsync(availabilityData);
+    if (!validationResult.IsValid)
+        return Results.BadRequest(validationResult.Errors);
 
-    // Creating new PriestAvailability object
-var newAvailability = new PriestAvailabilityInput
-{
-    StartDate = availabilityData.StartDate,
-    EndDate = availabilityData.EndDate,
-    Days = availabilityData.Days, // Correctly assign List<string>
-    StartTime = availabilityData.StartTime,
-    EndTime = availabilityData.EndTime
-};
-
-    db.PriestAvailabilities.Add(newAvailability);
+    db.PriestAvailabilities.Add(availabilityData);
     await db.SaveChangesAsync();
-    return Results.Created($"/priestavailabilities/{newAvailability.ID}", newAvailability);
+
+    // Optionally call Calendly API to create event
+    await calendlyService.CreateEventAsync(availabilityData);
+    return Results.Created($"/priestavailabilities/{availabilityData.ID}", availabilityData);
 });
 
-app.MapGet("/", () => "Hello World!");
-
-// Remaining endpoints (user authentication, profiles, meetings, etc.)
+// Google authentication
 app.MapGet("/login", async (HttpContext context) =>
 {
     await context.ChallengeAsync(GoogleDefaults.AuthenticationScheme, new AuthenticationProperties
@@ -73,137 +74,56 @@ app.MapGet("/login", async (HttpContext context) =>
     });
 });
 
+// Post-login endpoint
 app.MapGet("/post-login", async (HttpContext context, AppDbContext db) =>
 {
     if (context.User?.Identity?.IsAuthenticated == true)
     {
         var emailClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-        var nameClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
-        var FirstName = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname")?.Value;
-        var LastName = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname")?.Value;
+        var firstName = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname")?.Value;
+        var lastName = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname")?.Value;
 
         if (emailClaim != null)
         {
             var user = await db.Users.FirstOrDefaultAsync(u => u.Email == emailClaim);
-            if (user != null)
+            if (user == null)
             {
-                // User exists, redirect to profile
-                return Results.Redirect("/profile");
-            }
-            else
-            {
-                // User does not exist, create a new account
                 var newUser = new User
                 {
-                    FirstName = FirstName,
-                    LastName = LastName,
+                    FirstName = firstName,
+                    LastName = lastName,
                     Email = emailClaim
                 };
                 db.Users.Add(newUser);
                 await db.SaveChangesAsync();
-
-                var htmlContent = $@"
-                <!DOCTYPE html>
-                <html>
-                <head>
-                    <title>Account Created</title>
-                </head>
-                <body>
-                    <h1>Account Created</h1>
-                    <p>An account for {nameClaim} has been created.</p>
-                    <script>
-                        setTimeout(function() {{
-                            window.location.href = '/profile';
-                        }}, 3000);
-                    </script>
-                </body>
-                </html>";
-
-                return Results.Content(htmlContent, "text/html");
             }
+
+            return Results.Redirect("/profile");
         }
     }
+
     return Results.Unauthorized();
 });
-
 
 app.MapGet("/profile", (HttpContext context) =>
 {
     if (context.User?.Identity?.IsAuthenticated == true)
     {
-        var nameClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/firstname")?.Value;
-        var emailClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-        var result = new
-        {
-            Name = nameClaim,
-            Email = emailClaim
-        };
+        var name = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
+        var email = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
 
-        return Results.Ok(result);
+        return Results.Ok(new { Name = name, Email = email });
     }
     return Results.Unauthorized();
 });
 
-app.MapGet("/users", async (HttpContext context, AppDbContext db) =>
-{
-    var emailClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-    if (emailClaim != "heneinfilobatire@gmail.com")
-    {
-        return Results.Unauthorized();
-    }
-
-    var users = await db.Users.ToListAsync();
-    return Results.Ok(users);
-});
-
-app.MapPut("/users/{id}", async (int id, HttpContext context, User updatedUser, AppDbContext db) =>
-{
-    var emailClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-    if (emailClaim != "heneinfilobatire@gmail.com")
-    {
-        return Results.Unauthorized();
-    }
-
-    var user = await db.Users.FindAsync(id);
-    if (user == null)
-    {
-        return Results.NotFound();
-    }
-
-    user.FirstName = updatedUser.FirstName;
-    user.Email = updatedUser.Email;
-    // Update other fields as necessary
-
-    await db.SaveChangesAsync();
-    return Results.Ok(user);
-});
-
-app.MapPost("/users/cancel", (HttpContext context) =>
-{
-    var emailClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
-    if (emailClaim != "heneinfilobatire@gmail.com")
-    {
-        return Results.Unauthorized();
-    }
-
-    // Logic to handle cancel operation
-    return Results.Ok("Operation canceled.");
-});
-
-//remove later
-//work on backend for meeting
+// Delete all users (only for development purposes)
 app.MapGet("/delete-all-users", async (AppDbContext db) =>
 {
-    async Task DeleteAllUsers()
-    {
-        var users = await db.Users.ToListAsync();
-        db.Users.RemoveRange(users);
-        await db.SaveChangesAsync();
-    }
-
-    await DeleteAllUsers();
-    return Results.Ok("All users have been deleted.");
+    var users = await db.Users.ToListAsync();
+    db.Users.RemoveRange(users);
+    await db.SaveChangesAsync();
+    return Results.Ok("All users deleted.");
 });
-
 
 app.Run();
