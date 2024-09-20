@@ -73,13 +73,17 @@ namespace MinimalApiProject.Migrations
                     b.ToTable("Meetings");
                 });
 
-            modelBuilder.Entity("MinimalApiProject.Models.PriestAvailability", b =>
+            modelBuilder.Entity("MinimalApiProject.Models.PriestAvailabilityInput", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
-                    b.Property<DateTime>("Date")
+                    b.Property<string>("Days")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.Property<DateTime>("EndDate")
                         .HasColumnType("TEXT");
 
                     b.Property<TimeSpan>("EndTime")
@@ -87,6 +91,9 @@ namespace MinimalApiProject.Migrations
 
                     b.Property<bool>("IsAvailable")
                         .HasColumnType("INTEGER");
+
+                    b.Property<DateTime>("StartDate")
+                        .HasColumnType("TEXT");
 
                     b.Property<TimeSpan>("StartTime")
                         .HasColumnType("TEXT");
