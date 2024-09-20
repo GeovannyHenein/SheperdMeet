@@ -20,9 +20,7 @@ builder.Services.AddAuthentication(options =>
 })
 .AddGoogle(options =>
 {
-    options.ClientId = "849172139625-qdi6glhi56skbbpvtntbtguq5369ti3p.apps.googleusercontent.com";
-    options.ClientSecret = "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";
-    options.CallbackPath = "/signin-google"; 
+
     options.Scope.Add("email");
     options.Scope.Add("profile");
 });
