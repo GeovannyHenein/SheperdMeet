@@ -6,8 +6,18 @@ using MinimalApiProject.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowLocalhost",
+        builder => builder.WithOrigins("http://localhost:3001") // Replace with your frontend's URL
+                          .AllowAnyHeader()
+                          .AllowAnyMethod());
+});
+
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+
 builder.Services.AddAuthentication(options =>
 {
     options.DefaultAuthenticateScheme = CookieAuthenticationDefaults.AuthenticationScheme;
@@ -20,16 +30,55 @@ builder.Services.AddAuthentication(options =>
 })
 .AddGoogle(options =>
 {
-
+    options.ClientId = builder.Configuration["Authentication:Google:ClientId"];
+    options.ClientSecret = builder.Configuration["Authentication:Google:ClientSecret"];
+    options.CallbackPath = "/signin-google"; 
     options.Scope.Add("email");
     options.Scope.Add("profile");
 });
+
 builder.Services.AddAuthorization();
+
 var app = builder.Build();
+
+// Configure the HTTP request pipeline.
+app.UseCors("AllowLocalhost");
 app.UseAuthentication();
 app.UseAuthorization();
 
-// New endpoints for handling priest availability
+// Seed initial data
+using (var scope = app.Services.CreateScope())
+{
+    var db = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+    if (!db.PriestAvailabilities.Any())
+    {
+        db.PriestAvailabilities.AddRange(
+            new PriestAvailabilityInput
+            {
+                UserID = 1,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(7),
+                Days = new List<string> { "Monday", "Wednesday", "Friday" },
+                StartTime = TimeSpan.Parse("09:00"),
+                EndTime = TimeSpan.Parse("17:00"),
+                IsAvailable = true
+            },
+            new PriestAvailabilityInput
+            {
+                UserID = 2,
+                StartDate = DateTime.Now,
+                EndDate = DateTime.Now.AddDays(7),
+                Days = new List<string> { "Tuesday", "Thursday" },
+                StartTime = TimeSpan.Parse("10:00"),
+                EndTime = TimeSpan.Parse("16:00"),
+                IsAvailable = true
+            }
+        );
+        db.SaveChanges();
+    }
+}
+
+// Define endpoints
 app.MapGet("/priestavailabilities", async (AppDbContext db) => await db.PriestAvailabilities.ToListAsync());
 
 app.MapPost("/priestavailabilities", async (PriestAvailabilityInput availability, AppDbContext db) => {
