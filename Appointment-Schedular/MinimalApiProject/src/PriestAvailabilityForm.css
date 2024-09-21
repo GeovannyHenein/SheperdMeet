@@ -1,0 +1,82 @@
+/* Global Boujee Styling */
+body {
+  font-family: 'Poppins', sans-serif;
+  background-color: #1a1a1a;
+  color: #f9f9f9;
+  margin: 0;
+  padding: 0;
+}
+
+/* Calendar Container */
+.boujee-container {
+  max-width: 1200px;
+  margin: 50px auto;
+  padding: 20px;
+  background-color: #292929;
+  border-radius: 15px;
+  box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.3);
+  color: #f9f9f9;
+}
+
+h2 {
+  text-align: center;
+  font-size: 36px;
+  color: #ffd700;
+  margin-bottom: 30px;
+  text-shadow: 0px 3px 10px rgba(255, 215, 0, 0.7);
+}
+
+.calendar-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.month-nav {
+  background-color: #ffd700;
+  border: none;
+  padding: 10px;
+  border-radius: 5px;
+  font-size: 18px;
+  cursor: pointer;
+  color: #292929;
+}
+
+.calendar-grid {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 10px;
+  margin-top: 20px;
+}
+
+.calendar-day {
+  background-color: #333;
+  padding: 15px;
+  border-radius: 5px;
+  text-align: center;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-size: 18px;
+}
+
+.calendar-day:hover {
+  background-color: #ffd700;
+  color: #292929;
+}
+
+.selected {
+  background-color: #4caf50;
+}
+
+.availability-details {
+  margin-top: 30px;
+  padding: 20px;
+  background-color: #333;
+  border-radius: 5px;
+  box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.1);
+}
+
+.availability-details h3 {
+  margin-bottom: 20px;
+  color: #ffd700;
+}

@@ -815,3 +815,4 @@
 /Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/obj/Debug/net8.0/MinimalApiProject.pdb
 /Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/obj/Debug/net8.0/MinimalApiProject.genruntimeconfig.cache
 /Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/obj/Debug/net8.0/ref/MinimalApiProject.dll
+/Users/FoFa/Documents/GitHub/SheperdMeet/Appointment-Schedular/MinimalApiProject/bin/Debug/net8.0/build/asset-manifest.json

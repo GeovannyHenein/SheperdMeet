@@ -10,7 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowLocalhost",
-        builder => builder.WithOrigins("http://localhost:3001") // Replace with your frontend's URL
+        builder => builder.WithOrigins("http://localhost:3000") // Replace with your frontend's URL
                           .AllowAnyHeader()
                           .AllowAnyMethod());
 });
@@ -78,6 +78,23 @@ using (var scope = app.Services.CreateScope())
     }
 }
 
+app.MapPost("/api/availability", async (PriestAvailabilityInput availabilityInput, AppDbContext db) =>
+{
+    var availability = new PriestAvailabilityInput
+    {
+        UserID = availabilityInput.UserID,
+        StartDate = availabilityInput.StartDate,
+        EndDate = availabilityInput.EndDate,
+        Days = availabilityInput.Days,
+        StartTime = availabilityInput.StartTime,
+        EndTime = availabilityInput.EndTime,
+        IsAvailable = availabilityInput.IsAvailable
+    };
+
+    db.PriestAvailabilities.Add(availability);
+    await db.SaveChangesAsync();
+    return Results.Ok(availability);
+});
 // Define endpoints
 app.MapGet("/priestavailabilities", async (AppDbContext db) => await db.PriestAvailabilities.ToListAsync());
 
@@ -180,12 +197,19 @@ app.MapGet("/profile", (HttpContext context) =>
 {
     if (context.User?.Identity?.IsAuthenticated == true)
     {
-        var nameClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/firstname")?.Value;
+        var UserID = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier")?.Value;
         var emailClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/emailaddress")?.Value;
+        var firstnameClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/givenname")?.Value;
+        var lastnameClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/surname")?.Value;
+        var nameClaim = context.User.Claims.FirstOrDefault(c => c.Type == "http://schemas.xmlsoap.org/ws/2005/05/identity/claims/name")?.Value;
         var result = new
         {
+            Id = UserID,
+            role = "Admin",
             Name = nameClaim,
-            Email = emailClaim
+            Email = emailClaim,
+            firstname = firstnameClaim,
+            lastname = lastnameClaim
         };
 
         return Results.Ok(result);
