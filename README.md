@@ -1,61 +1,47 @@
-# ShepherdMeet
+ShepherdMeet
+ShepherdMeet is a scheduling application built with ASP.NET Core, designed to help members of a church schedule meetings with their Abouna (priest). It simplifies the organization of pastoral appointments.
 
-**ShepherdMeet** is a scheduling application built with Django, designed to help members of a church schedule meetings with their Abouna (priest). It facilitates the process of organizing pastoral appointments efficiently.
+Features
+Book one-on-one meetings with Abouna.
+View available time slots.
+Easy rescheduling and cancellation.
+Notifications and reminders for upcoming meetings.
+Getting Started
+Prerequisites
+Before you begin, ensure you have the following installed:
 
-## Features
-- Book one-on-one meetings with Abouna.
-- View available time slots.
-- Easy rescheduling and cancellation.
-- Notifications and reminders for upcoming meetings.
+Visual Studio
+.NET 6.0 SDK
+SQL Server Express
+Installation
+Clone the repository:
 
-## Getting Started
+bash
+Copy code
+git clone https://github.com/YourUsername/ShepherdMeet.git
+cd ShepherdMeet
+Open the project in Visual Studio.
 
-### Prerequisites
+Restore dependencies:
 
-Before you begin, ensure you have the following installed on your system:
+bash
+Copy code
+dotnet restore
+Apply database migrations and start the application:
 
-- [Python 3.x](https://www.python.org/)
-- [Django](https://www.djangoproject.com/)
-- [Git](https://git-scm.com/)
-- [Node.js](https://nodejs.org/) (optional if using frontend tools like npm)
+bash
+Copy code
+dotnet ef database update
+dotnet run
+Navigate to https://localhost:5001 in your browser.
 
-### Installation
+Contributing
+Fork the repository.
+Create a feature branch (git checkout -b feature/my-feature).
+Commit your changes (git commit -am 'Add new feature').
+Push to the branch (git push origin feature/my-feature).
+Create a new Pull Request.
 
-1. Clone the repository:
-
-    ```bash
-    git clone https://github.com/YourUsername/ShepherdMeet.git
-    cd ShepherdMeet
-    ```
-
-2. Set up a virtual environment (optional but recommended):
-
-    ```bash
-    python -m venv venv
-    source venv/bin/activate  # On Windows use `venv\Scripts\activate`
-    ```
-
-3. Install the required Python packages:
-
-    ```bash
-    pip install -r requirements.txt
-    ```
-
-4. Apply migrations and start the Django development server:
-
-    ```bash
-    python manage.py migrate
-    python manage.py runserver
-    ```
-
-
-### Contributing
-
-1. Fork the repository.
-2. Create a feature branch (`git checkout -b feature/my-feature`).
-3. Commit your changes (`git commit -am 'Add new feature'`).
-4. Push to the branch (`git push origin feature/my-feature`).
-5. Create a new Pull Request.
 
 All changes must be reviewed and approved before being merged into the main branch.
 
